@@ -96,17 +96,17 @@ void gameOver(int type)
   {
   case 0:
   {
-    cout << "X wins!";
+    cout << "X wins!\n\n";
     break;
   }
   case 1:
   {
-    cout << "O wins!";
+    cout << "O wins!\n\n";
     break;
   }
   case 2:
   {
-    cout << "Draw.";
+    cout << "Draw.\n\n";
     break;
   }
   }
@@ -198,7 +198,11 @@ int main()
 			}
 			
 			if (gameIsOver)
+			{
+				cout << "Press Enter to exit ... ";
+				cin.ignore().get(); //pause the CLI
 				return 0;
+			}
 		}
 	}
 }
