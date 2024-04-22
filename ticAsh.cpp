@@ -49,14 +49,19 @@ bool chooseSpot()
 				break;
 			}
 			}
+			
+			cout << "Spot " << (chosenSpot + 1) << ": " << spot[chosenSpot] << "\n";
+			return 1;
 		}
 
 		else {
 			cout << "Spot is used.\n";
+
+			cout << "Spot " << (chosenSpot + 1) << ": " << spot[chosenSpot] << "\n";
+			return 0;
 		}
 
 
-		cout << "Spot " << (chosenSpot + 1) << ": " << spot[chosenSpot] << "\n";
 	}
 	
 	else
@@ -64,9 +69,6 @@ bool chooseSpot()
 		cout << "Invalid Input.\n";
 		return 0;
 	}
-
-
-	return 1;
 }
 
 
@@ -124,7 +126,6 @@ int main()
 	while (1)
 	{
 		gameIsOver = false;
-		
 		
 		if(chooseSpot()) //check if input is valid
 			spotsUsed++;
