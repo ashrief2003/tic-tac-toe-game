@@ -1,157 +1,203 @@
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
-string spot[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-bool turn = true;
 
-int getin()
+
+char spot[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+int turn = 0; //0 = X, 1 = O
+
+
+bool chooseSpot()
 {
-	int input;
+	int chosenSpot;
+	char input[1];
+	cout << "Choose spot: ";
 	cin >> input;
-	///placing the mark on the chosen spot
-	if(input > 0 && input >! 9)
+
+	try
 	{
-		if(spot[input] != "X" && spot[input] != "O")
+		chosenSpot = stoi(string("")+input[0]);
+	}
+	catch (std::invalid_argument)
+	{
+		cout << "Invalid Input.\n";
+		return 0;
+	}
+	
+
+	///placing the mark on the chosen spot
+	if (chosenSpot >= 1 && chosenSpot <= 9)
+	{
+		chosenSpot--;
+
+		if (spot[chosenSpot] != 'X' && spot[chosenSpot] != 'O')
 		{
-			if(input == stoi(spot[input]))
+			switch (turn)
 			{
-				if(turn == true)
-				{
-					spot[input] = "O";
-					turn = false;
-				}
-				else {
-					turn = true;
-					spot[input] = "X";
-				}
+			case 0:
+			{
+				spot[chosenSpot] = 'X';
+				turn = 1;
+				break;
+			}
+			case 1:
+			{
+				spot[chosenSpot] = 'O';
+				turn = 0;
+				break;
+			}
 			}
 		}
+
 		else {
-			cout << "Invalid Input" << endl;
+			cout << "Spot is used.\n";
 		}
+
+
+		cout << "Spot " << (chosenSpot + 1) << ": " << spot[chosenSpot] << "\n";
 	}
-	else {
-		cout << "Invalid Input" << endl;
+	
+	else
+	{
+		cout << "Invalid Input.\n";
+		return 0;
 	}
-	
-	
-	
-	cout << input << " " << spot[input] << endl;
-	
-	return input;
-	
-}
-	
-int PrintResults()
-{
-	system("cls");
-	for(int i = 1; i < 9; ++i) {
-		cout << spot[i] << " | " ;
-		++i;
-		cout << spot[i] << " | " ;
-		++i;
-		cout << spot[i] << endl;
-	}
+
 
 	return 1;
 }
 
+
+void printGrid()
+{
+	cout << "\n\n";
+
+	for (int i = 0; i < 9; i++)
+	{
+		if ((float(i + 1) / 3.0f) != int(float(i + 1) / 3.0f)) //check if i is not 3, 6, or 9
+			cout << spot[i] << "|";
+
+		else if (i != 8)
+				cout << spot[i] << "\n------\n";
+
+		else
+			cout << spot[i] << "\n\n";
+	}
+}
+
+
+void gameOver(int type)
+{
+  switch (type)
+  {
+  case 0:
+  {
+    cout << "X wins!";
+    break;
+  }
+  case 1:
+  {
+    cout << "O wins!";
+    break;
+  }
+  case 2:
+  {
+    cout << "Draw.";
+    break;
+  }
+  }
+}
+
+
+
 int main()
 {
+	int spotsUsed = 0;
+	int spotInt[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int lineValue[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	bool gameIsOver = false;
 	
-	PrintResults();
-	while(1) {
-		getin();
-		PrintResults();
 
-		///Player X winning conditions
-		if(spot[1] == "X" && spot[2] == "X" && spot[3] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }
-		else if(spot[4] == "X" && spot[5] == "X" && spot[6] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }
-		else if(spot[7] == "X" && spot[8] == "X" && spot[9] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }
-		else if(spot[1] == "X" && spot[4] == "X" && spot[7] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }  
-		else if(spot[2] == "X" && spot[5] == "X" && spot[8] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }   
-		else if(spot[3] == "X" && spot[6] == "X" && spot[9] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }    
-		else if(spot[1] == "X" && spot[5] == "X" && spot[9] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }  
-		else if(spot[3] == "X" && spot[5] == "X" && spot[7] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        } 
+	printGrid();
+	while (1)
+	{
+		gameIsOver = false;
+		
+		
+		if(chooseSpot()) //check if input is valid
+			spotsUsed++;
+		printGrid();
+		
+		
+		if (spotsUsed > 2) //check who wins 
+		{
+			for (int i = 0; i < 9; i++)
+			{
+				switch (spot[i])
+				{
+				case 'X':
+				{
+					spotInt[i] = 1;
+					break;
+				}
+				case 'O':
+				{
+					spotInt[i] = -1;
+					break;
+				}
+				default:
+				{
+					spotInt[i] = 0;
+					break;
+				}
+				}
+			}
 
 
-		///Player O winning conditions
-		if(spot[1] == "O" && spot[2] == "O" && spot[3] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }
-		else if(spot[4] == "O" && spot[5] == "O" && spot[6] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }
-		else if(spot[7] == "O" && spot[8] == "O" && spot[9] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }
-		else if(spot[1] == "O" && spot[4] == "O" && spot[7] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }  
-		else if(spot[2] == "O" && spot[5] == "O" && spot[8] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }   
-		else if(spot[3] == "O" && spot[6] == "O" && spot[9] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }    
-		else if(spot[1] == "O" && spot[5] == "O" && spot[9] == "O")
-        {
-            cout << "O WINS THE GAME" << endl;
-			break;
-        }  
-		else if(spot[3] == "X" && spot[5] == "X" && spot[7] == "X")
-        {
-            cout << "X WINS THE GAME" << endl;
-			break;
-        }
+			lineValue[0] = spotInt[0] + spotInt[1] + spotInt[2];
+			lineValue[1] = spotInt[3] + spotInt[4] + spotInt[5];
+			lineValue[2] = spotInt[6] + spotInt[7] + spotInt[8];
+
+			lineValue[3] = spotInt[0] + spotInt[3] + spotInt[6];
+			lineValue[4] = spotInt[1] + spotInt[4] + spotInt[7];
+			lineValue[5] = spotInt[2] + spotInt[5] + spotInt[8];
+
+			lineValue[6] = spotInt[0] + spotInt[4] + spotInt[8];
+			lineValue[7] = spotInt[2] + spotInt[4] + spotInt[6];
+
+
+			for (int i = 0; i < 8; i++)
+			{
+				switch (lineValue[i])
+				{
+				case 3:
+				{
+					gameOver(0); //0 = X
+					gameIsOver = true;
+					break;
+				}
+				case -3:
+				{
+					gameOver(1); //1 = O
+					gameIsOver = true;
+					break;
+				}
+				}
+				
+				if (gameIsOver) break;
+			}
+
+
+			if (!gameIsOver && spotsUsed >= 9)
+			{
+				gameOver(2); //2 = draw
+				gameIsOver = true;
+			}
+			
+			if (gameIsOver)
+				return 0;
+		}
 	}
-	
-	return 0;
 }
-	
